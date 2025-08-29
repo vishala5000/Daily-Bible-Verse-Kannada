@@ -3,35 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ಕನ್ನಡ ಬೈಬಲ್ ವಾಕ್ಯಗಳು</title>
+<title>ಬೈಬಲ್ ಶ್ಲೋಕ</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body,html{height:100%;width:100%;font-family:'Segoe UI',sans-serif;overflow:hidden;background:#f1f1f1;}
-  .page{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 1s, transform 1s;}
-  .hidden{opacity:0;pointer-events:none;transform:scale(0.95);}
-  #splash{background:linear-gradient(135deg,#6a0dad,#ff6b6b);color:#fff;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;}
-  #splash h1{font-size:3em;text-align:center;animation:gradientText 5s ease infinite;background:linear-gradient(90deg,#fff,#ffd700,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  #splash p{margin-top:20px;font-size:1.2em;opacity:0.8;}
-  @keyframes gradientText{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+:root {
+  --primary:#4a90e2;
+  --secondary:#f1f1f1;
+  --accent:#6a0dad;
+  --text:#333;
+}
+html,body{margin:0;padding:0;width:100%;height:100%;font-family:'Segoe UI',sans-serif;background:var(--secondary);}
+.page{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s,transform 0.5s;}
+.hidden{opacity:0;pointer-events:none;transform:scale(0.95);}
 
-  #home{background:linear-gradient(120deg,#c1f0f6,#fef9f0);width:100%;height:100%;padding:20px;overflow:auto;}
-  .app-container{width:90%;max-width:450px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border-radius:30px;padding:30px;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,0.2);}
-  h1,h2{color:#fff;margin-bottom:15px;}
-  h1{font-size:1.5em;} h2{font-size:1em;}
-  canvas{width:100%;border-radius:20px;margin-bottom:20px;box-shadow:0 10px 25px rgba(0,0,0,0.3);}
-  .buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:15px;}
-  button{padding:14px 22px;border-radius:12px;border:none;font-size:1em;cursor:pointer;color:#fff;background:linear-gradient(90deg,#6a0dad,#ff6b6b);box-shadow:0 6px 15px rgba(0,0,0,0.3);transition:transform 0.2s, box-shadow 0.2s;}
-  button:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,0.4);background:linear-gradient(90deg,#ff6b6b,#6a0dad);}
-  .banner-ads{display:flex;flex-direction:column;align-items:center;width:100%;margin-top:15px;}
-  .banner-ads > div{margin:10px 0;text-align:center;}
+/* Splash */
+#splash{background:linear-gradient(135deg,#6a0dad,#ff6b6b);color:#fff;flex-direction:column;text-align:center;}
+#splash h1{font-size:3em;background:linear-gradient(90deg,#fff,#ffd700,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradientText 5s infinite;}
+#splash p{margin-top:15px;font-size:1.2em;opacity:0.9;}
+@keyframes gradientText{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+
+/* Home */
+#home{flex-direction:column;overflow:auto;padding:15px;}
+.app-container{width:95%;max-width:480px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border-radius:25px;padding:20px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.2);}
+h1{font-size:1.3em;color:var(--primary);}
+h2{font-size:1em;color:#444;margin-bottom:15px;}
+canvas{width:100%;max-width:450px;border-radius:20px;margin-bottom:15px;box-shadow:0 10px 25px rgba(0,0,0,0.25);}
+.buttons{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:15px;}
+button{padding:12px 20px;border-radius:12px;border:none;font-size:1em;cursor:pointer;color:#fff;background:linear-gradient(90deg,#6a0dad,#ff6b6b);box-shadow:0 6px 15px rgba(0,0,0,0.3);transition:0.2s;}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,0.4);background:linear-gradient(90deg,#ff6b6b,#6a0dad);}
+
+.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:25px;font-size:0.9em;opacity:0;pointer-events:none;transition:0.4s;}
+.toast.show{opacity:1;pointer-events:auto;}
+
+.banner-ads{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;margin-top:10px;}
+.banner-ads > div{margin:10px 0;text-align:center;}
+.banner-ads iframe{max-width:100%;}
 </style>
 </head>
 <body>
 
 <!-- Splash -->
 <div id="splash" class="page">
-  <h1>ಕನ್ನಡ ಬೈಬಲ್ ವಾಕ್ಯಗಳು</h1>
-  <p>ಪ್ರತಿದಿನವೂ ಪ್ರೇರಣೆಯ ಶ್ಲೋಕಗಳು</p>
+  <h1>ಬೈಬಲ್ ಶ್ಲೋಕ</h1>
+  <p>ನಿತ್ಯದ ಶ್ಲೋಕದಿಂದ ಪ್ರೇರಣೆ</p>
 </div>
 
 <!-- Home -->
@@ -42,58 +55,106 @@
     <canvas id="verse-canvas" width="450" height="450"></canvas>
     <div class="buttons">
       <button onclick="generateVerseImage()">🔄 ಹೊಸ ಶ್ಲೋಕ</button>
-      <button onclick="downloadImage()">⬇️ ಡೌನ್‌ಲೋಡ್</button>
+      <button onclick="downloadImage()">⬇️ ಡೌನ್ಲೋಡ್</button>
       <button onclick="shareImage()">📤 ಹಂಚಿಕೊಳ್ಳಿ</button>
     </div>
-
+    
     <!-- Banner Ads -->
     <div class="banner-ads">
       <div class="banner-classic">
+        <!-- Replace YOUR_ADSTERAA_KEY with your actual Adsterra key -->
         <script type="text/javascript">
-          atOptions = {
-            'key' : '3fcf2237ab3c7796108f33a1522ae5f5',
-            'format' : 'iframe',
-            'height' : 60,
-            'width' : 468,
-            'params' : {}
-          };
+        atOptions = {
+          'key' : 'YOUR_ADSTERAA_KEY',
+          'format' : 'iframe',
+          'height' : 60,
+          'width' : 468,
+          'params' : {}
+        };
         </script>
-        <script type="text/javascript" src="//www.highperformanceformat.com/3fcf2237ab3c7796108f33a1522ae5f5/invoke.js"></script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/YOUR_ADSTERAA_KEY/invoke.js"></script>
       </div>
       <div class="banner-native">
-        <script async data-cfasync="false" src="//pl27523297.effectivecpmrate.com/4a6d683f02e3d8f3a07f228ed76f271c/invoke.js"></script>
-        <div id="container-4a6d683f02e3d8f3a07f228ed76f271c"></div>
+        <script async data-cfasync="false" src="//pl27523297.effectivecpmrate.com/YOUR_ADSTERAA_KEY/invoke.js"></script>
+        <div id="container-YOUR_ADSTERAA_KEY"></div>
       </div>
     </div>
+
   </div>
 </div>
 
+<div id="toast" class="toast">ಪ್ರತಿಕೃತಿ!</div>
+
 <script>
+// Splash transition
+const splash=document.getElementById('splash');
+const home=document.getElementById('home');
+setTimeout(()=>{
+  splash.classList.add('hidden');
+  home.classList.remove('hidden');
+},2000);
+
+// Canvas
 const canvas=document.getElementById("verse-canvas");
 const ctx=canvas.getContext("2d");
+canvas.width=450; canvas.height=450;
+
+// Toast
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500);}
+
+// Load verses
 let verses=[];
-let currentVerse="";
-
-// Splash -> Home
-setTimeout(()=>{document.getElementById('splash').classList.add('hidden'); document.getElementById('home').classList.remove('hidden'); generateVerseImage();},2500);
-
-// Load local JSON (kn_kjv.json) on GitHub Pages
 async function loadVerses(){
   try{
-    const res = await fetch("kn_kjv.json");
-    verses = await res.json();
+    const res=await fetch("kn_kjv.json");
+    verses=await res.json();
+    if(!Array.isArray(verses)||verses.length===0) throw new Error("JSON structure invalid");
   }catch(e){
     console.error("Failed to load Kannada Bible:",e);
-    verses=[{"text":"ಸಾಮಾನ್ಯ ಶ್ಲೋಕ","reference":"Genesis 1:1"}];
+    showToast("ಶ್ಲೋಕ ಲೋಡ್ ಆಗಲಿಲ್ಲ!");
   }
 }
+function getRandomVerse(){
+  if(!verses.length) return null;
+  return verses[Math.floor(Math.random()*verses.length)];
+}
 
+// Generate verse image
+async function generateVerseImage(){
+  if(!verses.length) await loadVerses();
+  const verse=getRandomVerse();
+  if(!verse||!verse.text){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="#333";
+    ctx.font="20px Segoe UI";
+    ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText("ಶ್ಲೋಕ ಲಭ್ಯವಿಲ್ಲ",canvas.width/2,canvas.height/2);
+    return;
+  }
+  const text=`${verse.text} — ${verse.reference||""}`;
+  document.getElementById("verse-title").innerText="ಬೈಬಲ್ ಶ್ಲೋಕ";
+  document.getElementById("verse-subtitle").innerText=verse.reference||"";
+
+  // Optional: local images to avoid cross-origin issues
+  const img = new Image();
+  img.src="images/bg1.jpg"; 
+  img.onload = ()=>{
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    ctx.fillStyle="rgba(0,0,0,0.35)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="#fff"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.font="bold 22px Segoe UI";
+    wrapTextCentered(ctx,text,canvas.width/2,canvas.height/2,canvas.width-40,30);
+  };
+}
+
+// Wrap text
 function wrapTextCentered(ctx,text,x,y,maxWidth,lineHeight){
-  const words=text.split(" "); let line=""; const lines=[];
+  const words=text.split(" ");
+  let line="";const lines=[];
   for(let n=0;n<words.length;n++){
     const testLine=line+words[n]+" ";
     const metrics=ctx.measureText(testLine);
-    if(metrics.width>maxWidth&&n>0){lines.push(line);line=words[n]+" ";} else{line=testLine;}
+    if(metrics.width>maxWidth&&n>0){lines.push(line);line=words[n]+" ";}else{line=testLine;}
   }
   lines.push(line);
   const totalHeight=lines.length*lineHeight;
@@ -101,46 +162,28 @@ function wrapTextCentered(ctx,text,x,y,maxWidth,lineHeight){
   for(let i=0;i<lines.length;i++){ctx.fillText(lines[i],x,startY+i*lineHeight);}
 }
 
-function getRandomVerse(){if(verses.length===0) return {"text":"ಶ್ಲೋಕ ಲಭ್ಯವಿಲ್ಲ","reference":""}; return verses[Math.floor(Math.random()*verses.length)];}
-function getRandomImage(){const images=["1.jpg","2.jpg","3.jpg","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg","9.jpg","10.jpg"]; return images[Math.floor(Math.random()*images.length)];}
-
-async function generateVerseImage(){
-  if(verses.length===0) await loadVerses();
-  const verse=getRandomVerse();
-  currentVerse=`${verse.text} — ${verse.reference}`;
-  document.getElementById("verse-title").innerText="ಬೈಬಲ್ ಶ್ಲೋಕ";
-  document.getElementById("verse-subtitle").innerText=verse.reference;
-
-  ctx.fillStyle="#ddd"; ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="#333"; ctx.font="20px Segoe UI"; ctx.fillText("Loading...",150,220);
-
-  const img=new Image();
-  img.src=getRandomImage();
-  img.onload=()=>{
-    ctx.drawImage(img,0,0,canvas.width,canvas.height);
-    ctx.fillStyle="rgba(0,0,0,0.35)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle="#fff"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.font="bold 24px Segoe UI";
-    wrapTextCentered(ctx,currentVerse,canvas.width/2,canvas.height/2,canvas.width-40,32);
-  }
-}
-
+// Download & Share
 function downloadImage(){
-  const link=document.createElement("a");
-  link.download="verse-image.png";
-  link.href=canvas.toDataURL("image/png");
-  document.body.appendChild(link); link.click(); document.body.removeChild(link);
+  canvas.toBlob(blob=>{
+    const link=document.createElement("a");
+    link.download="verse.png";
+    link.href=URL.createObjectURL(blob);
+    link.click();
+  });
 }
-
 async function shareImage(){
   if(navigator.share && navigator.canShare){
-    canvas.toBlob(async(blob)=>{
+    canvas.toBlob(async blob=>{
       const file=new File([blob],"verse.png",{type:"image/png"});
       if(navigator.canShare({files:[file]})){
-        try{await navigator.share({files:[file],title:"ಬೈಬಲ್ ಶ್ಲೋಕ",text:"ಈ ಶ್ಲೋಕವನ್ನು ನೋಡಿ!"});}catch(err){console.log("Share cancelled");}
-      }else{alert("Sharing not supported on this device.");}
+        try{await navigator.share({files:[file],title:"ಬೈಬಲ್ ಶ್ಲೋಕ",text:"ಈ ಶ್ಲೋಕ ನೋಡಿ!"})}catch(e){console.log(e);}
+      }else showToast("ಈ ಸಾಧನದಲ್ಲಿ ಹಂಚಿಕೆ ಸಾಧ್ಯವಿಲ್ಲ!");
     });
-  }else{alert("Sharing not supported on this browser.");}
+  }else showToast("ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಹಂಚಿಕೆ ಸಾಧ್ಯವಿಲ್ಲ!");
 }
+
+// Init
+generateVerseImage();
 </script>
 </body>
 </html>
