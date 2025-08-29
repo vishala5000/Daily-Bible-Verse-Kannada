@@ -1,188 +1,214 @@
 <!DOCTYPE html>
 <html lang="kn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ಬೈಬಲ್ ಶ್ಲೋಕ</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ದೈನಂದಿನ ಬೈಬಲ್ ಪದ್ಯ</title>
 <style>
 :root {
-  --primary:#4a90e2;
-  --secondary:#f1f1f1;
-  --accent:#6a0dad;
-  --text:#333;
+  --primary: #4a90e2;
+  --secondary: #f1f1f1;
+  --text: #333;
+  --accent: #007bff;
 }
-html,body{margin:0;padding:0;width:100%;height:100%;font-family:'Segoe UI',sans-serif;background:var(--secondary);}
-.page{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s,transform 0.5s;}
-.hidden{opacity:0;pointer-events:none;transform:scale(0.95);}
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+.app-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
+  animation: fadeIn 0.5s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+h1 { font-size: 1.4em; color: var(--primary); margin-bottom: 10px; }
+h2 { font-size: 1em; color: #666; margin-bottom: 20px; }
+canvas#verse-canvas { width: 100%; max-width: 500px; border-radius: 12px; margin-bottom: 16px; }
+.buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 10px; }
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+button:hover { background: #0056b3; }
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 0.9em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.toast.show { opacity: 1; pointer-events: auto; }
 
-/* Splash */
-#splash{background:linear-gradient(135deg,#6a0dad,#ff6b6b);color:#fff;flex-direction:column;text-align:center;}
-#splash h1{font-size:3em;background:linear-gradient(90deg,#fff,#ffd700,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradientText 5s infinite;}
-#splash p{margin-top:15px;font-size:1.2em;opacity:0.9;}
-@keyframes gradientText{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-
-/* Home */
-#home{flex-direction:column;overflow:auto;padding:15px;}
-.app-container{width:95%;max-width:480px;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border-radius:25px;padding:20px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.2);}
-h1{font-size:1.3em;color:var(--primary);}
-h2{font-size:1em;color:#444;margin-bottom:15px;}
-canvas{width:100%;max-width:450px;border-radius:20px;margin-bottom:15px;box-shadow:0 10px 25px rgba(0,0,0,0.25);}
-.buttons{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:15px;}
-button{padding:12px 20px;border-radius:12px;border:none;font-size:1em;cursor:pointer;color:#fff;background:linear-gradient(90deg,#6a0dad,#ff6b6b);box-shadow:0 6px 15px rgba(0,0,0,0.3);transition:0.2s;}
-button:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,0.4);background:linear-gradient(90deg,#ff6b6b,#6a0dad);}
-
-.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:25px;font-size:0.9em;opacity:0;pointer-events:none;transition:0.4s;}
-.toast.show{opacity:1;pointer-events:auto;}
-
-.banner-ads{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;margin-top:10px;}
-.banner-ads > div{margin:10px 0;text-align:center;}
-.banner-ads iframe{max-width:100%;}
+/* Banner ads styling */
+.banner-ads { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+.banner-ads > iframe { margin: 10px 0; max-width: 100%; border: none; height: 60px; }
 </style>
 </head>
 <body>
+<div class="app-container">
+  <h1 id="verse-title">ದೈನಂದಿನ ಬೈಬಲ್ ಪದ್ಯ</h1>
+  <h2 id="verse-subtitle">ಪದ್ಯ ಲೋಡ್ ಆಗುತ್ತಿದೆ...</h2>
+  <canvas id="verse-canvas"></canvas>
 
-<!-- Splash -->
-<div id="splash" class="page">
-  <h1>ಬೈಬಲ್ ಶ್ಲೋಕ</h1>
-  <p>ನಿತ್ಯದ ಶ್ಲೋಕದಿಂದ ಪ್ರೇರಣೆ</p>
-</div>
+  <div class="buttons">
+    <button onclick="generateVerseImage()">🔄 ಹೊಸ ಪದ್ಯ</button>
+    <button onclick="downloadImage()">⬇️ ಚಿತ್ರ ಡೌನ್‌ಲೋಡ್</button>
+    <button onclick="shareImage()">📤 ಚಿತ್ರ ಹಂಚಿಕೊಳ್ಳಿ</button>
+  </div>
 
-<!-- Home -->
-<div id="home" class="page hidden">
-  <div class="app-container">
-    <h1 id="verse-title">ಬೈಬಲ್ ಶ್ಲೋಕ</h1>
-    <h2 id="verse-subtitle">ಶ್ಲೋಕ ಲೋಡ್ ಆಗುತ್ತಿದೆ...</h2>
-    <canvas id="verse-canvas" width="450" height="450"></canvas>
-    <div class="buttons">
-      <button onclick="generateVerseImage()">🔄 ಹೊಸ ಶ್ಲೋಕ</button>
-      <button onclick="downloadImage()">⬇️ ಡೌನ್ಲೋಡ್</button>
-      <button onclick="shareImage()">📤 ಹಂಚಿಕೊಳ್ಳಿ</button>
-    </div>
-    
-    <!-- Banner Ads -->
-    <div class="banner-ads">
-      <div class="banner-classic">
-        <!-- Replace YOUR_ADSTERAA_KEY with your actual Adsterra key -->
-        <script type="text/javascript">
-        atOptions = {
-          'key' : 'YOUR_ADSTERAA_KEY',
-          'format' : 'iframe',
-          'height' : 60,
-          'width' : 468,
-          'params' : {}
-        };
-        </script>
-        <script type="text/javascript" src="//www.highperformanceformat.com/YOUR_ADSTERAA_KEY/invoke.js"></script>
-      </div>
-      <div class="banner-native">
-        <script async data-cfasync="false" src="//pl27523297.effectivecpmrate.com/YOUR_ADSTERAA_KEY/invoke.js"></script>
-        <div id="container-YOUR_ADSTERAA_KEY"></div>
-      </div>
-    </div>
-
+  <!-- Banner Ads -->
+  <div class="banner-ads">
+    <!-- Adsterra Classic Banner -->
+    <iframe src="https://www.profitabledisplaynetwork.com/YOUR_ADSTERAA_KEY/invoke.html" scrolling="no"></iframe>
+    <!-- Adsterra Native Banner -->
+    <iframe src="https://pl27523297.effectivecpmrate.com/YOUR_ADSTERAA_KEY/invoke.html" scrolling="no"></iframe>
   </div>
 </div>
 
-<div id="toast" class="toast">ಪ್ರತಿಕೃತಿ!</div>
+<div id="toast" class="toast">ನಕಲಿಸಲಾಗಿದೆ!</div>
 
 <script>
-// Splash transition
-const splash=document.getElementById('splash');
-const home=document.getElementById('home');
-setTimeout(()=>{
-  splash.classList.add('hidden');
-  home.classList.remove('hidden');
-},2000);
+const PEXELS_API_KEY = "6VWwmD5hmbughYr9dzcyF1kTQhZHsnmM66HpGE3hPp22s8lDjFDqoGwU";
+const canvas = document.getElementById("verse-canvas");
+const ctx = canvas.getContext("2d");
+canvas.width = 500;
+canvas.height = 500;
+let currentVerseText = "";
 
-// Canvas
-const canvas=document.getElementById("verse-canvas");
-const ctx=canvas.getContext("2d");
-canvas.width=450; canvas.height=450;
-
-// Toast
-function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500);}
-
-// Load verses
-let verses=[];
-async function loadVerses(){
-  try{
-    const res=await fetch("kn_kjv.json");
-    verses=await res.json();
-    if(!Array.isArray(verses)||verses.length===0) throw new Error("JSON structure invalid");
-  }catch(e){
-    console.error("Failed to load Kannada Bible:",e);
-    showToast("ಶ್ಲೋಕ ಲೋಡ್ ಆಗಲಿಲ್ಲ!");
-  }
-}
-function getRandomVerse(){
-  if(!verses.length) return null;
-  return verses[Math.floor(Math.random()*verses.length)];
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
-// Generate verse image
-async function generateVerseImage(){
-  if(!verses.length) await loadVerses();
-  const verse=getRandomVerse();
-  if(!verse||!verse.text){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle="#333";
-    ctx.font="20px Segoe UI";
-    ctx.textAlign="center"; ctx.textBaseline="middle";
-    ctx.fillText("ಶ್ಲೋಕ ಲಭ್ಯವಿಲ್ಲ",canvas.width/2,canvas.height/2);
-    return;
+async function fetchVerseText() {
+  const subtitle = document.getElementById("verse-subtitle");
+  subtitle.innerText = "ಹೊಸ ಪದ್ಯ ಲೋಡ್ ಆಗುತ್ತಿದೆ...";
+  try {
+    const res = await fetch("https://beta.ourmanna.com/api/v1/get/?format=json&order=random");
+    const data = await res.json();
+    const verse = data.verse.details.text;
+    const reference = data.verse.details.reference;
+    currentVerseText = `${verse} — ${reference}`;
+    document.getElementById("verse-title").innerText = "ದೈನಂದಿನ ಬೈಬಲ್ ಪದ್ಯ";
+    document.getElementById("verse-subtitle").innerText = reference;
+    return currentVerseText;
+  } catch (e) {
+    subtitle.innerText = "ಪದ್ಯ ಲೋಡ್ ಮಾಡಲು ವೈಫಲ್ಯ";
+    return null;
   }
-  const text=`${verse.text} — ${verse.reference||""}`;
-  document.getElementById("verse-title").innerText="ಬೈಬಲ್ ಶ್ಲೋಕ";
-  document.getElementById("verse-subtitle").innerText=verse.reference||"";
+}
 
-  // Optional: local images to avoid cross-origin issues
+async function fetchRandomImage() {
+  const res = await fetch("https://api.pexels.com/v1/search?query=landscape&per_page=50&orientation=square", {
+    headers: { Authorization: PEXELS_API_KEY }
+  });
+  const data = await res.json();
+  const photos = data.photos;
+  const random = photos[Math.floor(Math.random() * photos.length)];
+  return random.src.large;
+}
+
+function wrapTextCentered(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(" ");
+  let line = "";
+  const lines = [];
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + " ";
+    if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+      lines.push(line);
+      line = words[n] + " ";
+    } else {
+      line = testLine;
+    }
+  }
+  lines.push(line);
+  const totalHeight = lines.length * lineHeight;
+  let startY = y - totalHeight / 2;
+  for (let i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], x, startY + (i * lineHeight));
+  }
+}
+
+async function generateVerseImage() {
+  ctx.fillStyle = "#ddd";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#333";
+  ctx.font = "20px Segoe UI";
+  ctx.fillText("ಲೋಡ್ ಆಗುತ್ತಿದೆ...", 200, 250);
+  const verseText = await fetchVerseText();
+  if (!verseText) return;
+
+  const imgUrl = await fetchRandomImage();
   const img = new Image();
-  img.src="images/bg1.jpg"; 
-  img.onload = ()=>{
-    ctx.drawImage(img,0,0,canvas.width,canvas.height);
-    ctx.fillStyle="rgba(0,0,0,0.35)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle="#fff"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.font="bold 22px Segoe UI";
-    wrapTextCentered(ctx,text,canvas.width/2,canvas.height/2,canvas.width-40,30);
+  img.crossOrigin = "anonymous";
+  img.src = imgUrl;
+  img.onload = () => {
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "bold 24px Segoe UI";
+    wrapTextCentered(ctx, verseText, canvas.width / 2, canvas.height / 2, canvas.width - 60, 34);
   };
 }
 
-// Wrap text
-function wrapTextCentered(ctx,text,x,y,maxWidth,lineHeight){
-  const words=text.split(" ");
-  let line="";const lines=[];
-  for(let n=0;n<words.length;n++){
-    const testLine=line+words[n]+" ";
-    const metrics=ctx.measureText(testLine);
-    if(metrics.width>maxWidth&&n>0){lines.push(line);line=words[n]+" ";}else{line=testLine;}
-  }
-  lines.push(line);
-  const totalHeight=lines.length*lineHeight;
-  let startY=y-totalHeight/2;
-  for(let i=0;i<lines.length;i++){ctx.fillText(lines[i],x,startY+i*lineHeight);}
+function downloadImage() {
+  const link = document.createElement("a");
+  link.download = "verse-image.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
 }
 
-// Download & Share
-function downloadImage(){
-  canvas.toBlob(blob=>{
-    const link=document.createElement("a");
-    link.download="verse.png";
-    link.href=URL.createObjectURL(blob);
-    link.click();
-  });
-}
-async function shareImage(){
-  if(navigator.share && navigator.canShare){
-    canvas.toBlob(async blob=>{
-      const file=new File([blob],"verse.png",{type:"image/png"});
-      if(navigator.canShare({files:[file]})){
-        try{await navigator.share({files:[file],title:"ಬೈಬಲ್ ಶ್ಲೋಕ",text:"ಈ ಶ್ಲೋಕ ನೋಡಿ!"})}catch(e){console.log(e);}
-      }else showToast("ಈ ಸಾಧನದಲ್ಲಿ ಹಂಚಿಕೆ ಸಾಧ್ಯವಿಲ್ಲ!");
+async function shareImage() {
+  if (navigator.share && navigator.canShare) {
+    canvas.toBlob(async (blob) => {
+      const file = new File([blob], "verse.png", { type: "image/png" });
+      if (navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "ಬೈಬಲ್ ಪದ್ಯ",
+            text: "ಈ ಪದ್ಯವನ್ನು ನೋಡಿ!"
+          });
+        } catch (err) { console.log("ಹಂಚಿಕೆ ರದ್ದುಗೊಂಡಿತು ಅಥವಾ ವಿಫಲವಾಗಿದೆ."); }
+      }
     });
-  }else showToast("ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಹಂಚಿಕೆ ಸಾಧ್ಯವಿಲ್ಲ!");
+  } else { alert("ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಹಂಚಿಕೆ ಬೆಂಬಲಿಸಲಾಗುತ್ತಿಲ್ಲ."); }
 }
 
-// Init
 generateVerseImage();
 </script>
 </body>
